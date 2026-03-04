@@ -1,0 +1,26 @@
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.board{
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    width: 533px;
+    height: 533px;
+    border: 2px solid black;
+    text-align: center;;
+}
+
+.blackSlot{
+    background-color: rgb(6, 32, 175);
+    border: 1px solid black;
+}
+
+.whiteSlot{
+    background-color: #dd8500;
+    border: 1px solid black;
+}
