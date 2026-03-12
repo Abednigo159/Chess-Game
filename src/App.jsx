@@ -30,7 +30,6 @@ import whiteKingClicked from "./assets/whiteKingClicked.png";
 
 import greenDot from "./assets/greenDot.png";
 
-console.log(greenDot);
 const generateBoardSlots = () => {
 	const column = ["A", "B", "C", "D", "E", "F", "G", "H"];
 	const row = [8, 7, 6, 5, 4, 3, 2, 1];
@@ -121,8 +120,9 @@ function App() {
 			)
 		}
 
-		//=====PAWN MOVES=====
 		let moveThePiece = [];
+
+		//=====PAWN MOVES=====
 		const whitePawnMove = [
 			{c: colIndex, r: rowIndex - 1},
 			...(rowIndex === 6 ? [{c: colIndex, r: rowIndex - 2}] : [])
@@ -148,7 +148,18 @@ function App() {
 				let r = rowIndex + dr;
 
 				while(c >= 0 && c <= 7 && r >= 0 && r <= 7){
-					bishop.push({c, r});
+					const targetBox = column[c] + row[r];
+					const blockingPiece = piece.find(p => p.slot === targetBox);
+
+					if(!blockingPiece){
+						bishop.push({c, r});
+					}
+					else{
+						if(blockingPiece.team !== clickedPiece.team){
+							bishop.push({c, r});
+						}
+						break;
+					}
 					c += dc;
 					r += dr;
 				}
@@ -180,11 +191,23 @@ function App() {
 			]
 
 			directions.forEach(({dc, dr}) => {
+
 				let c = colIndex + dc;
 				let r = rowIndex + dr;
 
 				while(c >= 0 && c <= 7 && r >= 0 && r <= 7){
-					rook.push({c, r});
+					const targetBox = column[c] + row[r];
+					const blockingPiece = piece.find(p => p.slot === targetBox);
+
+					if(!blockingPiece){
+						rook.push({c, r});
+					}
+					else{
+						if(blockingPiece.team !== clickedPiece.team){
+							rook.push({c, r});
+						}
+						break;
+					}
 					c += dc;
 					r += dr;
 				}
@@ -212,7 +235,18 @@ function App() {
 				let r = rowIndex + dr;
 
 				while(c >= 0 && c <= 7 && r >= 0 && r <= 7){
-					queen.push({c, r});
+					const targetBox = column[c] + row[r];
+					const blockingPiece = piece.find(p => p.slot === targetBox);
+
+					if(!blockingPiece){
+						queen.push({c, r});
+					}
+					else{
+						if(blockingPiece.team !== clickedPiece.team){
+							queen.push({c, r});
+						}
+						break;
+					}
 					c += dc;
 					r += dr;
 				}
@@ -266,13 +300,33 @@ function App() {
 					column[m.c] + row[m.r] === s.slot
 				);
 
-				return moveMatch ? {...s, clickable: true} : {...s, clickable: false};
+				return moveMatch ? {...s, clickable: !s.clickable} : {...s, clickable: false};
 			})
 		)
 	}
 
-	function movePiece(slot){
+	function movePiece(targetSlot){
+		const selectedPiece = piece.find(p => p.clicked);
 
+		if(!selectedPiece) return;
+
+		const clickableSlot = slot.find(s => s.slot === targetSlot);
+
+		if(!clickableSlot) return;
+
+		setPiece(prevPiece =>
+			prevPiece
+			.map(p => p.clicked ? {...p, slot: targetSlot, clicked: false} : p)
+			.filter(p => p.slot !== targetSlot)
+		);
+
+		setSlot(prevSlot => 
+			prevSlot.map(s => (
+				{...s, clickable: false}
+			))
+		);
+
+		setTurnToMove(prevTurn => prevTurn === 1 ? 2 : 1);
 	}
 
 	return (
