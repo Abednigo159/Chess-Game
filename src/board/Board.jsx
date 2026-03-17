@@ -16,7 +16,14 @@ export default function Board({slotNames, pieces, togglePiece, movePiece, greenD
 						<img src={
 						placement.clicked ? placement.imageClicked : placement.image} 
 						alt={placement.name} 
-						onClick={() => togglePiece(placement.name)}/>
+						onClick={() => {
+							if(slotName.clickable){
+								movePiece(slotName.slot)
+							}
+							else if(placement){
+								togglePiece(placement.name)
+							}
+						}}/>
 					}
 					{!placement && slotName.clickable && (
 						<img src={greenDot} 

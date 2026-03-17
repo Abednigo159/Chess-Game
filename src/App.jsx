@@ -123,14 +123,94 @@ function App() {
 		let moveThePiece = [];
 
 		//=====PAWN MOVES=====
-		const whitePawnMove = [
-			{c: colIndex, r: rowIndex - 1},
-			...(rowIndex === 6 ? [{c: colIndex, r: rowIndex - 2}] : [])
-		]
-		const blackPawnMove = [
-			{c: colIndex, r: rowIndex + 1},
-			...(rowIndex === 1 ? [{c: colIndex, r: rowIndex + 2}] : [])
-		]
+		function whitePawnMoves(colIndex, rowIndex){
+			const moves = [];
+
+			const detectEnemy = [
+				{c: colIndex - 1, r: rowIndex - 1},
+				{c: colIndex + 1, r: rowIndex - 1}
+			]
+
+			detectEnemy.forEach(({c, r}) => {
+				if(c < 0 || c > 7 || r < 0 || r > 7) return;
+
+				const detectingSlot = column[c] + row[r];
+				const pieceDetected = piece.find(p => p.slot === detectingSlot);
+
+				if(pieceDetected && pieceDetected.team !== clickedPiece.team){
+					moves.push({c, r});
+				}
+			})
+
+			const oneStep = {
+				c: colIndex, r: rowIndex - 1
+			}
+
+			const oneStepSlot = column[oneStep.c] + row[oneStep.r];
+			const oneStepBlock = piece.find(p => p.slot === oneStepSlot);
+
+			if(!oneStepBlock){
+				moves.push(oneStep);
+
+				if(rowIndex === 6){
+					const twoStep = {
+						c: colIndex, r: rowIndex - 2 
+					};
+
+					const twoStepSlot = column[twoStep.c] + row[twoStep.r];
+					const twoStepBlock = piece.find(p => p.slot === twoStepSlot);
+
+					if(!twoStepBlock) moves.push(twoStep);
+				}
+			}
+			return moves;
+		}
+
+		
+		function blackPawnMoves(colIndex, rowIndex){
+			const moves = [];
+
+			const detectEnemy = [
+				{c: colIndex - 1, r: rowIndex + 1},
+				{c: colIndex + 1, r: rowIndex + 1}
+			]
+
+			detectEnemy.forEach(({c, r}) => {
+				if(c < 0 || c > 7 || r < 0 || r > 7) return;
+
+				const detectingSlot = column[c] + row[r];
+				const pieceDetected = piece.find(p => p.slot === detectingSlot);
+
+				if(pieceDetected && pieceDetected.team !== clickedPiece.team){
+					moves.push({c, r});
+				}
+			})
+
+			const oneStep = {
+				c: colIndex, r: rowIndex + 1
+			}
+
+			const targetSlot = column[oneStep.c] + row[oneStep.r];
+			const oneStepBlock = piece.find(p => p.slot === targetSlot);
+
+			if(!oneStepBlock){
+				moves.push(oneStep);
+
+				if(rowIndex === 1){
+					const twoStep = {
+						c: colIndex, r: rowIndex + 2
+					}
+
+					const twoStepSlot = column[twoStep.c] + row[twoStep.r];
+					const twoStepBlock = piece.find(p => p.slot === twoStepSlot);
+
+					if(!twoStepBlock){
+						moves.push(twoStep);
+					}
+				}
+				return moves;
+			}
+		}
 
 		//=====BISHOP MOVES=====
 		function bishopMoves(colIndex, rowIndex){
@@ -269,10 +349,10 @@ function App() {
 		if(clickedPiece){
 			switch(clickedPiece.type){
 				case "whitePawn":
-					moveThePiece = whitePawnMove;
+					moveThePiece = whitePawnMoves(colIndex, rowIndex);
 					break;
 				case "blackPawn":
-					moveThePiece = blackPawnMove;
+					moveThePiece = blackPawnMoves(colIndex, rowIndex);
 					break;
 				case "Bishop":
 					moveThePiece = bishopMoves(colIndex, rowIndex);
@@ -294,13 +374,12 @@ function App() {
 			
 		setSlot(prevSlots =>
 			prevSlots.map(s => {
-				const moveMatch = moveThePiece.find(m => 
-					m.c <= 7 && m.c >= 0 &&
-					m.r <= 7 && m.r >= 0 &&
-					column[m.c] + row[m.r] === s.slot
-				);
-
-				return moveMatch ? {...s, clickable: !s.clickable} : {...s, clickable: false};
+				const moveMatch = moveThePiece.find(m => {
+						if(m.c < 0 || m.c > 7 || m.r < 0 || m.r > 7) return false;
+					
+						return column[m.c] + row[m.r] === s.slot;
+				});
+				return moveMatch ? {...s, clickable: true} : {...s, clickable: false};
 			})
 		)
 	}
@@ -310,14 +389,14 @@ function App() {
 
 		if(!selectedPiece) return;
 
-		const clickableSlot = slot.find(s => s.slot === targetSlot);
+		const clickableSlot = slot.find(s => s.slot === targetSlot && s.clickable);
 
 		if(!clickableSlot) return;
 
 		setPiece(prevPiece =>
 			prevPiece
+			.filter(p => !(p.slot === targetSlot && !p.clicked))
 			.map(p => p.clicked ? {...p, slot: targetSlot, clicked: false} : p)
-			.filter(p => p.slot !== targetSlot)
 		);
 
 		setSlot(prevSlot => 
