@@ -1,5 +1,4 @@
 body{
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,7 +69,7 @@ body{
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(8, 1fr);
-        width: 85vw;
+        width: 80vw;
         border: 2px solid black;
         text-align: center;;
     }
@@ -81,7 +80,7 @@ body{
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(8, 1fr);
-        width: 100vw;
+        width: 90vw;
         border: 2px solid black;
         text-align: center;;
     }
