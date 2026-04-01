@@ -538,16 +538,6 @@ function App() {
 
 	return (
 		<>
-			
-
-			{gameStatus === "checkmate" || gameStatus === "stalemate" ? (
-				<div style={{ textAlign: "center", marginBottom: "8px" }}>
-					<button onClick={resetGame} style={{ padding: "8px 20px", cursor: "pointer" }}>
-						Play Again
-					</button>
-				</div>
-			) : null}
-
 			<Board
 				statusMessage={statusMessage}
 				slotNames={slots}
@@ -558,6 +548,8 @@ function App() {
 				promotionPending={promotionPending}
 				PROMOTION_PIECES={PROMOTION_PIECES}
 				promotePawn={promotePawn}
+				gameStatus={gameStatus}
+				resetGame={resetGame}
 			/>
 		</>
 	);

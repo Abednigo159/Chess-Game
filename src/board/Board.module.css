@@ -53,6 +53,23 @@ body{
     align-items: center;
 }
 
+.resetButton{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: rgb(255, 23, 23);
+    padding: 50px;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    font-family: verdana;
+    font-size: xx-large;
+    color: white;
+}
+
 @media(min-width: 1025px){
     .board{
         display: grid;
@@ -80,7 +97,7 @@ body{
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(8, 1fr);
-        width: 90vw;
+        width: 95vw;
         border: 2px solid black;
         text-align: center;;
     }

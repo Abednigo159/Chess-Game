@@ -1,7 +1,7 @@
 import React from "react";
 import style from "./Board.module.css";
 
-export default function Board({slotNames, pieces, togglePiece, movePiece, greenDot, statusMessage, promotionPending, PROMOTION_PIECES, promotePawn}){
+export default function Board({slotNames, pieces, togglePiece, movePiece, greenDot, statusMessage, promotionPending, PROMOTION_PIECES, promotePawn, gameStatus, resetGame}){
   	return (<>
 		<div className={style.status}>{statusMessage}</div>
 		
@@ -51,5 +51,11 @@ export default function Board({slotNames, pieces, togglePiece, movePiece, greenD
 				</div>
 			</div>
 		)}
+
+		{gameStatus === "checkmate" || gameStatus === "stalemate" ? (
+			<button className={style.resetButton} onClick={resetGame} style={{ padding: "8px 20px", cursor: "pointer" }}>
+				Play Again
+			</button>
+		) : null}
 	</>);
 }
