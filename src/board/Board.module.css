@@ -5,22 +5,84 @@ body{
     align-items: center;
 }
 
-.board{
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-    width: 533px;
-    height: 533px;
-    border: 2px solid black;
-    text-align: center;;
+.status{
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    font-family: verdana;
+    font-weight: 500;
+    font-size: 2rem;
+}
+
+.piecesImage{
+    width: 100%;
+    object-fit: contain;
+}
+
+.greenDot{
+    width: 80%;
+}
+
+.promotionOption{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: rgb(0, 211, 0);
+    padding: 10px;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    font-family: verdana;
 }
 
 .blackSlot{
     background-color: rgb(6, 32, 175);
     border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .whiteSlot{
     background-color: #dd8500;
     border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media(min-width: 1025px){
+    .board{
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        width: 40vw;
+        border: 2px solid black;
+        text-align: center;;
+    }
+}
+
+@media(min-width: 769px) and (max-width: 1024px){
+    .board{
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        width: 85vw;
+        border: 2px solid black;
+        text-align: center;;
+    }
+}
+
+@media(max-width: 768px){
+    .board{
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        width: 100vw;
+        border: 2px solid black;
+        text-align: center;;
+    }
 }

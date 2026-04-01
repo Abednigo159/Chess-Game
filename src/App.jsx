@@ -29,527 +29,538 @@ import whiteKingClicked from "./assets/whiteKingClicked.png";
 
 import greenDot from "./assets/greenDot.png";
 
-const generateBoardSlots = () => {
-	const column = ["A", "B", "C", "D", "E", "F", "G", "H"];
-	const row = [8, 7, 6, 5, 4, 3, 2, 1];
+// ─── CONSTANTS ───────────────────────────────────────────────────────────────
 
-	const slots = row.flatMap((r) =>
-		column.map((c) => ({
-			slot: `${c}${r}`,
-			piece: null,
-			clickable: false
-		}))
+const COLUMN = ["A", "B", "C", "D", "E", "F", "G", "H"];
+const ROW    = [8, 7, 6, 5, 4, 3, 2, 1];
+
+// ─── BOARD SETUP ─────────────────────────────────────────────────────────────
+
+function generateBoardSlots() {
+	return ROW.flatMap((r) =>
+		COLUMN.map((c) => ({ slot: `${c}${r}`, clickable: false }))
 	);
-	return {column, row, slots};
 }
 
-function generatePieces(column, row){
+function generatePieces() {
 	const officials = [
-		{image: blackQueen, imageClicked: blackQueenClicked, name: "blackQueen", type: "Queen", slot: `${column[3]}${row[0]}`, team: 2, clicked: false},
-		{image: blackKing, imageClicked: blackKingClicked,name: "blackKing", type: "King", slot: `${column[4]}${row[0]}`, team: 2, clicked: false, moved: false},
-		{image: blackBishop, imageClicked: blackBishopClicked, name: "blackBishop1", type: "Bishop", slot: `${column[2]}${row[0]}`, team: 2, clicked: false},
-		{image: blackBishop, imageClicked: blackBishopClicked, name: "blackBishop2", type: "Bishop", slot: `${column[5]}${row[0]}`, team: 2, clicked: false},
-		{image: blackKnight, imageClicked: blackKnightClicked, name: "blackKnight1", type: "Knight", slot: `${column[1]}${row[0]}`, team: 2, clicked: false},
-		{image: blackKnight, imageClicked: blackKnightClicked, name: "blackKnight2", type: "Knight", slot: `${column[6]}${row[0]}`, team: 2, clicked: false},
-		{image: blackRook, imageClicked: blackRookClicked, name: "blackRook1", type: "Rook", slot: `${column[0]}${row[0]}`, team: 2, clicked: false, moved: false},
-		{image: blackRook, imageClicked: blackRookClicked, name: "blackRook2", type: "Rook", slot: `${column[7]}${row[0]}`, team: 2, clicked: false, moved: false},
-		{image: whiteQueen, imageClicked: whiteQueenClicked, name: "whiteQueen", type: "Queen", slot: `${column[3]}${row[7]}`, team: 1, clicked: false},
-		{image: whiteKing, imageClicked: whiteKingClicked, name: "whiteKing", type: "King", slot: `${column[4]}${row[7]}`, team: 1, clicked: false, moved: false},
-		{image: whiteBishop, imageClicked: whiteBishopClicked, name: "whiteBishop1", type: "Bishop", slot: `${column[2]}${row[7]}`, team: 1, clicked: false},
-		{image: whiteBishop, imageClicked: whiteBishopClicked, name: "whiteBishop2", type: "Bishop", slot: `${column[5]}${row[7]}`, team: 1, clicked: false},
-		{image: whiteKnight, imageClicked: whiteKnightClicked, name: "whiteKnight1", type: "Knight", slot: `${column[1]}${row[7]}`, team: 1, clicked: false},
-		{image: whiteKnight, imageClicked: whiteKnightClicked, name: "whiteKnight2", type: "Knight", slot: `${column[6]}${row[7]}`, team: 1, clicked: false},
-		{image: whiteRook, imageClicked: whiteRookClicked, name: "whiteRook1", type: "Rook", slot: `${column[0]}${row[7]}`, team: 1, clicked: false, moved: false},
-		{image: whiteRook, imageClicked: whiteRookClicked, name: "whiteRook2", type: "Rook", slot: `${column[7]}${row[7]}`, team: 1, clicked: false, moved: false}
+		{ image: blackQueen,  imageClicked: blackQueenClicked,  name: "blackQueen",   type: "Queen", slot: "D8", team: 2, clicked: false },
+		{ image: blackKing,   imageClicked: blackKingClicked,   name: "blackKing",    type: "King",  slot: "E8", team: 2, clicked: false, moved: false },
+		{ image: blackBishop, imageClicked: blackBishopClicked, name: "blackBishop1", type: "Bishop",slot: "C8", team: 2, clicked: false },
+		{ image: blackBishop, imageClicked: blackBishopClicked, name: "blackBishop2", type: "Bishop",slot: "F8", team: 2, clicked: false },
+		{ image: blackKnight, imageClicked: blackKnightClicked, name: "blackKnight1", type: "Knight",slot: "B8", team: 2, clicked: false },
+		{ image: blackKnight, imageClicked: blackKnightClicked, name: "blackKnight2", type: "Knight",slot: "G8", team: 2, clicked: false },
+		{ image: blackRook,   imageClicked: blackRookClicked,   name: "blackRook1",   type: "Rook",  slot: "A8", team: 2, clicked: false, moved: false },
+		{ image: blackRook,   imageClicked: blackRookClicked,   name: "blackRook2",   type: "Rook",  slot: "H8", team: 2, clicked: false, moved: false },
+		{ image: whiteQueen,  imageClicked: whiteQueenClicked,  name: "whiteQueen",   type: "Queen", slot: "D1", team: 1, clicked: false },
+		{ image: whiteKing,   imageClicked: whiteKingClicked,   name: "whiteKing",    type: "King",  slot: "E1", team: 1, clicked: false, moved: false },
+		{ image: whiteBishop, imageClicked: whiteBishopClicked, name: "whiteBishop1", type: "Bishop",slot: "C1", team: 1, clicked: false },
+		{ image: whiteBishop, imageClicked: whiteBishopClicked, name: "whiteBishop2", type: "Bishop",slot: "F1", team: 1, clicked: false },
+		{ image: whiteKnight, imageClicked: whiteKnightClicked, name: "whiteKnight1", type: "Knight",slot: "B1", team: 1, clicked: false },
+		{ image: whiteKnight, imageClicked: whiteKnightClicked, name: "whiteKnight2", type: "Knight",slot: "G1", team: 1, clicked: false },
+		{ image: whiteRook,   imageClicked: whiteRookClicked,   name: "whiteRook1",   type: "Rook",  slot: "A1", team: 1, clicked: false, moved: false },
+		{ image: whiteRook,   imageClicked: whiteRookClicked,   name: "whiteRook2",   type: "Rook",  slot: "H1", team: 1, clicked: false, moved: false },
 	];
 
-	const pawns = [];
+	const pawns = COLUMN.flatMap((c, i) => [
+		{ image: blackPawn, imageClicked: blackPawnClicked, name: `blackPawn${i}`, type: "blackPawn", slot: `${c}7`, team: 2, clicked: false, moved: false },
+		{ image: whitePawn, imageClicked: whitePawnClicked, name: `whitePawn${i}`, type: "whitePawn", slot: `${c}2`, team: 1, clicked: false, moved: false },
+	]);
 
-	for(let i = 0; i < column.length; i++){
-		pawns.push({
-			image: blackPawn,
-			imageClicked: blackPawnClicked,
-			name: `blackPawn${i}`,
-			type: "blackPawn",
-			slot: `${column[i]}${row[1]}`,
-			team: 2, clicked: false
-		}, {
-			image: whitePawn,
-			imageClicked: whitePawnClicked,
-			name: `whitePawn${i}`,
-			type: "whitePawn",
-			slot: `${column[i]}${row[6]}`,
-			team: 1,
-			clicked: false
-		})
-	}
 	return [...officials, ...pawns];
 }
 
-//=====PAWN MOVES=====
-function whitePawnMoves(colIndex, rowIndex, currentPiece, pieces, column, row){
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+
+function toSlot(c, r) {
+	return COLUMN[c] + ROW[r];
+}
+
+function colOf(slot) {
+	return COLUMN.indexOf(slot[0]);
+}
+
+function rowOf(slot) {
+	return ROW.indexOf(Number(slot.slice(1)));
+}
+
+function inBounds(c, r) {
+	return c >= 0 && c <= 7 && r >= 0 && r <= 7;
+}
+
+function pieceAt(slot, pieces) {
+	return pieces.find(p => p.slot === slot) ?? null;
+}
+
+// ─── MOVE GENERATORS ─────────────────────────────────────────────────────────
+
+function whitePawnMoves(c, r, piece, pieces, enPassantTarget) {
 	const moves = [];
 
-	const detectEnemy = [
-		{c: colIndex - 1, r: rowIndex - 1},
-		{c: colIndex + 1, r: rowIndex - 1}
-	]
-
-	detectEnemy.forEach(({c, r}) => {
-		if(c < 0 || c > 7 || r < 0 || r > 7) return;
-
-		const detectingSlot = column[c] + row[r];
-		const pieceDetected = pieces.find(p => p.slot === detectingSlot);
-
-		if(pieceDetected && pieceDetected.team !== currentPiece.team){
-			moves.push({c, r});
-		}
-	})
-
-	const oneStep = {
-		c: colIndex, r: rowIndex - 1
-	}
-
-	const oneStepSlot = column[oneStep.c] + row[oneStep.r];
-	const oneStepBlock = pieces.find(p => p.slot === oneStepSlot);
-
-	if(!oneStepBlock){
-		moves.push(oneStep);
-
-		if(rowIndex === 6){
-			const twoStep = {
-				c: colIndex, r: rowIndex - 2 
-			};
-
-			const twoStepSlot = column[twoStep.c] + row[twoStep.r];
-			const twoStepBlock = pieces.find(p => p.slot === twoStepSlot);
-
-			if(!twoStepBlock) moves.push(twoStep);
+	// Diagonal captures (including en passant)
+	for (const dc of [-1, 1]) {
+		if (!inBounds(c + dc, r - 1)) continue;
+		const target = toSlot(c + dc, r - 1);
+		const blocker = pieceAt(target, pieces);
+		if (blocker && blocker.team !== piece.team) {
+			moves.push({ c: c + dc, r: r - 1 });
+		} else if (target === enPassantTarget) {
+			moves.push({ c: c + dc, r: r - 1, enPassant: true, captureSlot: toSlot(c + dc, r) });
 		}
 	}
+
+	// Forward one step
+	if (inBounds(c, r - 1) && !pieceAt(toSlot(c, r - 1), pieces)) {
+		moves.push({ c, r: r - 1 });
+		// Forward two steps from starting rank
+		if (r === 6 && !pieceAt(toSlot(c, r - 2), pieces)) {
+			moves.push({ c, r: r - 2, pawnDoubleMove: toSlot(c, r - 1) });
+		}
+	}
+
 	return moves;
 }
 
-
-function blackPawnMoves(colIndex, rowIndex, currentPiece, pieces, column, row){
+function blackPawnMoves(c, r, piece, pieces, enPassantTarget) {
 	const moves = [];
 
-	const detectEnemy = [
-		{c: colIndex - 1, r: rowIndex + 1},
-		{c: colIndex + 1, r: rowIndex + 1}
-	]
-
-	detectEnemy.forEach(({c, r}) => {
-		if(c < 0 || c > 7 || r < 0 || r > 7) return;
-
-		const detectingSlot = column[c] + row[r];
-		const pieceDetected = pieces.find(p => p.slot === detectingSlot);
-
-		if(pieceDetected && pieceDetected.team !== currentPiece.team){
-			moves.push({c, r});
-		}
-	})
-
-	const oneStep = {
-		c: colIndex, r: rowIndex + 1
-	}
-
-	const targetSlot = column[oneStep.c] + row[oneStep.r];
-	const oneStepBlock = pieces.find(p => p.slot === targetSlot);
-
-	if(!oneStepBlock){
-		moves.push(oneStep);
-
-		if(rowIndex === 1){
-			const twoStep = {
-				c: colIndex, r: rowIndex + 2
-			}
-
-			const twoStepSlot = column[twoStep.c] + row[twoStep.r];
-			const twoStepBlock = pieces.find(p => p.slot === twoStepSlot);
-
-			if(!twoStepBlock){
-				moves.push(twoStep);
-			}
+	// Diagonal captures (including en passant)
+	for (const dc of [-1, 1]) {
+		if (!inBounds(c + dc, r + 1)) continue;
+		const target = toSlot(c + dc, r + 1);
+		const blocker = pieceAt(target, pieces);
+		if (blocker && blocker.team !== piece.team) {
+			moves.push({ c: c + dc, r: r + 1 });
+		} else if (target === enPassantTarget) {
+			moves.push({ c: c + dc, r: r + 1, enPassant: true, captureSlot: toSlot(c + dc, r) });
 		}
 	}
+
+	// Forward one step
+	if (inBounds(c, r + 1) && !pieceAt(toSlot(c, r + 1), pieces)) {
+		moves.push({ c, r: r + 1 });
+		// Forward two steps from starting rank
+		if (r === 1 && !pieceAt(toSlot(c, r + 2), pieces)) {
+			moves.push({ c, r: r + 2, pawnDoubleMove: toSlot(c, r + 1) });
+		}
+	}
+
 	return moves;
 }
 
-//=====BISHOP MOVES=====
-function bishopMoves(colIndex, rowIndex, currentPiece, pieces, column, row){
-	const bishop = [];
-
-	const directions = [
-		{dc: -1, dr: -1}, //northWest
-		{dc: 1, dr: -1}, //northEast
-		{dc: 1, dr: 1}, //southEast
-		{dc: -1, dr: 1} //southWest
-	]
-
-	directions.forEach(({dc, dr}) => {
-		let c = colIndex + dc;
-		let r = rowIndex + dr;
-
-		while(c >= 0 && c <= 7 && r >= 0 && r <= 7){
-			const targetBox = column[c] + row[r];
-			const blockingPiece = pieces.find(p => p.slot === targetBox);
-
-			if(!blockingPiece){
-				bishop.push({c, r});
-			}
-			else{
-				if(blockingPiece.team !== currentPiece.team){
-					bishop.push({c, r});
-				}
+function slidingMoves(c, r, piece, pieces, directions) {
+	const moves = [];
+	for (const { dc, dr } of directions) {
+		let nc = c + dc, nr = r + dr;
+		while (inBounds(nc, nr)) {
+			const blocker = pieceAt(toSlot(nc, nr), pieces);
+			if (!blocker) {
+				moves.push({ c: nc, r: nr });
+			} else {
+				if (blocker.team !== piece.team) moves.push({ c: nc, r: nr });
 				break;
 			}
-			c += dc;
-			r += dr;
-		}
-	});
-return bishop;
-}
-
-//=====KNIGHT MOVES=====
-function knightMoves(colIndex, rowIndex, currentPiece, pieces, column, row){
-	const moves = [];
-
-	const directions = [
-		{dc: -1, dr: -2},
-		{dc: -2, dr: -1},
-		{dc: 1, dr: -2},
-		{dc: 2, dr: -1},
-		{dc: -1, dr: 2},
-		{dc: -2, dr: 1},
-		{dc: 1, dr: 2},
-		{dc: 2, dr: 1}
-	]
-
-	directions.forEach(({dc, dr}) => {
-		const c = colIndex + dc;
-		const r = rowIndex + dr;
-
-		if(c < 0 || c > 7 || r < 0 || r > 7) return;
-
-		const targetSlot = column[c] + row[r];
-		const blockingPiece = pieces.find(p => p.slot === targetSlot);
-
-		if(!blockingPiece || blockingPiece.team !== currentPiece.team){
-			moves.push({c, r});
-		}
-	})
-	return moves;
-} 
-
-//=====ROOK MOVES=====
-function rookMoves(colIndex, rowIndex, currentPiece, pieces, column, row){
-	const rook = [];
-
-	const directions = [
-		{dc: 0, dr: -1}, //North
-		{dc: 1, dr: 0}, //East
-		{dc: 0, dr: 1}, //South
-		{dc: -1, dr: 0} //West
-	]
-
-	directions.forEach(({dc, dr}) => {
-
-		let c = colIndex + dc;
-		let r = rowIndex + dr;
-
-		while(c >= 0 && c <= 7 && r >= 0 && r <= 7){
-			const targetBox = column[c] + row[r];
-			const blockingPiece = pieces.find(p => p.slot === targetBox);
-
-			if(!blockingPiece){
-				rook.push({c, r});
-			}
-			else{
-				if(blockingPiece.team !== currentPiece.team){
-					rook.push({c, r});
-				}
-				break;
-			}
-			c += dc;
-			r += dr;
-		}
-	});
-	return rook;
-}
-
-//=====QUEEN MOVES=====
-function queenMoves(colIndex, rowIndex, currentPiece, pieces, column, row){
-	const queen = [];
-
-	const directions = [
-		{dc: -1, dr: -1}, //northWest
-		{dc: 1, dr: -1}, //northEast
-		{dc: 1, dr: 1}, //southEast
-		{dc: -1, dr: 1}, //southWest
-		{dc: 0, dr: -1}, //North
-		{dc: 1, dr: 0}, //East
-		{dc: 0, dr: 1}, //South
-		{dc: -1, dr: 0} //West
-	]
-
-	directions.forEach(({dc, dr}) => {
-		let c = colIndex + dc;
-		let r = rowIndex + dr;
-
-		while(c >= 0 && c <= 7 && r >= 0 && r <= 7){
-			const targetBox = column[c] + row[r];
-			const blockingPiece = pieces.find(p => p.slot === targetBox);
-
-			if(!blockingPiece){
-				queen.push({c, r});
-			}
-			else{
-				if(blockingPiece.team !== currentPiece.team){
-					queen.push({c, r});
-				}
-				break;
-			}
-			c += dc;
-			r += dr;
-		}
-	});
-	return queen;
-}
-
-//=====KING MOVES=====
-function kingMoves(colIndex, rowIndex, currentPiece, pieces,  column, row, skipCheckDetection = false){
-	const moves = [];
-	
-	const directions = [
-		{dc: -1, dr: -1},
-		{dc: 0, dr: -1},
-		{dc: 1, dr: -1},
-		{dc: -1, dr: 0},
-		{dc: 1, dr: 0},
-		{dc: -1, dr: 1},
-		{dc: 0, dr: 1},
-		{dc: 1, dr: 1}
-	];
-
-	const attackedSlot = skipCheckDetection ? new Set() :
-	getAttackedSquares(currentPiece.team === 1 ? 2 : 1, pieces.filter(p => p !== currentPiece), column, row);
-
-
-	directions.forEach(({dc, dr}) => {
-		const c = colIndex + dc;
-		const r = rowIndex + dr;
-
-		if(c < 0 || c > 7 || r < 0 || r > 7) return;
-
-		const targetSlot = column[c] + row[r];
-		const blockingPiece = pieces.find(p => p.slot === targetSlot);
-
-		if(attackedSlot.has(targetSlot)) return;
-
-		if(!blockingPiece || blockingPiece.team !== currentPiece.team){
-			moves.push({c, r});
-		}
-	})
-
-	if(!currentPiece.moved && !skipCheckDetection){
-
-		const queenSideRook = pieces.find(p => p.team === currentPiece.team && p.type === "Rook" && p.slot[0] === "A" && !p.moved);
-		const kingSideRook = pieces.find(p => p.team === currentPiece.team && p.type === "Rook" && p.slot[0] === "H" && !p.moved);
-
-		if(queenSideRook){
-			const path = [
-				{c: colIndex - 1, r: rowIndex},
-				{c: colIndex - 2, r: rowIndex},
-				{c: colIndex - 3, r: rowIndex}
-			];
-			const pathClear = path.every(s => !pieces.find(p => p.slot === column[s.c] + row[s.r]));
-			const pathSafe = path.every(s => !attackedSlot.has(column[s.c] + row[s.r]));
-
-			if(pathClear && pathSafe){
-				moves.push({c: colIndex - 2, r: rowIndex, castling: queenSideRook, newSlot: column[colIndex - 1] + row[rowIndex]});
-			}
-		}
-
-		if(kingSideRook){
-			const path = [
-				{c: colIndex + 1, r: rowIndex},
-				{c: colIndex + 2, r: rowIndex}
-			];
-			const pathClear = path.every(s => !pieces.find(p => p.slot === column[s.c] + row[s.r]));
-			const pathSafe = path.every(s => !attackedSlot.has(column[s.c] + row[s.r]));
-
-			if(pathClear && pathSafe){
-				moves.push({c: colIndex + 2, r: rowIndex, castling: kingSideRook, newSlot: column[colIndex + 1] + row[rowIndex]});
-			}
+			nc += dc;
+			nr += dr;
 		}
 	}
 	return moves;
 }
 
-function getAttackedSquares(enemyTeam, pieces, column, row){
+function bishopMoves(c, r, piece, pieces) {
+	return slidingMoves(c, r, piece, pieces, [
+		{ dc: -1, dr: -1 }, { dc: 1, dr: -1 },
+		{ dc: 1, dr: 1 },   { dc: -1, dr: 1 },
+	]);
+}
+
+function rookMoves(c, r, piece, pieces) {
+	return slidingMoves(c, r, piece, pieces, [
+		{ dc: 0, dr: -1 }, { dc: 1, dr: 0 },
+		{ dc: 0, dr: 1 },  { dc: -1, dr: 0 },
+	]);
+}
+
+function queenMoves(c, r, piece, pieces) {
+	return slidingMoves(c, r, piece, pieces, [
+		{ dc: -1, dr: -1 }, { dc: 1, dr: -1 }, { dc: 1, dr: 1 }, { dc: -1, dr: 1 },
+		{ dc: 0, dr: -1 },  { dc: 1, dr: 0 },  { dc: 0, dr: 1 }, { dc: -1, dr: 0 },
+	]);
+}
+
+function knightMoves(c, r, piece, pieces) {
+	return [
+		{ dc: -1, dr: -2 }, { dc: -2, dr: -1 },
+		{ dc: 1,  dr: -2 }, { dc: 2,  dr: -1 },
+		{ dc: -1, dr: 2  }, { dc: -2, dr: 1  },
+		{ dc: 1,  dr: 2  }, { dc: 2,  dr: 1  },
+	]
+		.filter(({ dc, dr }) => inBounds(c + dc, r + dr))
+		.filter(({ dc, dr }) => {
+			const blocker = pieceAt(toSlot(c + dc, r + dr), pieces);
+			return !blocker || blocker.team !== piece.team;
+		})
+		.map(({ dc, dr }) => ({ c: c + dc, r: r + dr }));
+}
+
+function kingMoves(c, r, piece, pieces, skipCheckDetection = false) {
+	const moves = [];
+
+	const attacked = skipCheckDetection
+		? new Set()
+		: getAttackedSquares(piece.team === 1 ? 2 : 1, pieces.filter(p => p !== piece));
+
+	// Normal one-square moves
+	for (const { dc, dr } of [
+		{ dc: -1, dr: -1 }, { dc: 0, dr: -1 }, { dc: 1, dr: -1 },
+		{ dc: -1, dr: 0  },                     { dc: 1, dr: 0  },
+		{ dc: -1, dr: 1  }, { dc: 0, dr: 1  }, { dc: 1, dr: 1  },
+	]) {
+		const nc = c + dc, nr = r + dr;
+		if (!inBounds(nc, nr)) continue;
+		const target = toSlot(nc, nr);
+		if (attacked.has(target)) continue;
+		const blocker = pieceAt(target, pieces);
+		if (!blocker || blocker.team !== piece.team) {
+			moves.push({ c: nc, r: nr });
+		}
+	}
+
+	// Castling
+	if (!piece.moved && !skipCheckDetection) {
+		const kingInCheck = attacked.has(piece.slot);
+
+		if (!kingInCheck) {
+			// Queen-side castling
+			const qRook = pieces.find(p =>
+				p.team === piece.team && p.type === "Rook" && p.slot[0] === "A" && !p.moved
+			);
+			if (qRook) {
+				const path = [
+					{ c: c - 1, r }, { c: c - 2, r }, { c: c - 3, r }
+				];
+				const pathClear = path.every(s => !pieceAt(toSlot(s.c, s.r), pieces));
+				const pathSafe  = path.slice(0, 2).every(s => !attacked.has(toSlot(s.c, s.r)));
+				if (pathClear && pathSafe) {
+					moves.push({ c: c - 2, r, castling: qRook, newSlot: toSlot(c - 1, r) });
+				}
+			}
+
+			// King-side castling
+			const kRook = pieces.find(p =>
+				p.team === piece.team && p.type === "Rook" && p.slot[0] === "H" && !p.moved
+			);
+			if (kRook) {
+				const path = [{ c: c + 1, r }, { c: c + 2, r }];
+				const pathClear = path.every(s => !pieceAt(toSlot(s.c, s.r), pieces));
+				const pathSafe  = path.every(s => !attacked.has(toSlot(s.c, s.r)));
+				if (pathClear && pathSafe) {
+					moves.push({ c: c + 2, r, castling: kRook, newSlot: toSlot(c + 1, r) });
+				}
+			}
+		}
+	}
+
+	return moves;
+}
+
+// ─── ATTACK / CHECK / CHECKMATE / STALEMATE ──────────────────────────────────
+
+function getAttackedSquares(enemyTeam, pieces) {
 	const attacked = new Set();
 
 	pieces.forEach(p => {
-		if(p.team !== enemyTeam) return;
+		if (p.team !== enemyTeam) return;
 
-		const colIdx = column.indexOf(p.slot[0]);
-		const rowIdx = row.indexOf(Number(p.slot[1]));
-
+		const c = colOf(p.slot);
+		const r = rowOf(p.slot);
 		let moves = [];
 
-		switch(p.type){
+		switch (p.type) {
 			case "whitePawn":
-				moves = [{c: colIdx - 1, r: rowIdx - 1}, {c: colIdx + 1, r: rowIdx - 1}];
+				moves = [{ c: c - 1, r: r - 1 }, { c: c + 1, r: r - 1 }];
 				break;
 			case "blackPawn":
-				moves = [{c: colIdx - 1, r: rowIdx + 1}, {c: colIdx + 1, r: rowIdx + 1}];
+				moves = [{ c: c - 1, r: r + 1 }, { c: c + 1, r: r + 1 }];
 				break;
-			case "Bishop":
-				moves = bishopMoves(colIdx, rowIdx, p, pieces, column, row);
-				break;
-			case "Knight":
-				moves = knightMoves(colIdx, rowIdx, p, pieces, column, row);
-				break;
-			case "Rook":
-				moves = rookMoves(colIdx, rowIdx, p, pieces, column, row);
-				break;
-			case "Queen":
-				moves = queenMoves(colIdx, rowIdx, p, pieces, column, row);
-				break;
-			case "King":
-				moves = kingMoves(colIdx, rowIdx, p, pieces, column, row, true);
-				break;
+			case "Bishop": moves = bishopMoves(c, r, p, pieces); break;
+			case "Knight": moves = knightMoves(c, r, p, pieces); break;
+			case "Rook":   moves = rookMoves(c, r, p, pieces);   break;
+			case "Queen":  moves = queenMoves(c, r, p, pieces);  break;
+			case "King":   moves = kingMoves(c, r, p, pieces, true); break;
 		}
 
-		moves.forEach(({c, r}) => {
-			if(c >= 0 && c <= 7 && r >= 0 && r <= 7){
-				attacked.add(column[c] + row[r]);
-			}
+		moves.forEach(({ c: mc, r: mr }) => {
+			if (inBounds(mc, mr)) attacked.add(toSlot(mc, mr));
 		});
-	})
+	});
+
 	return attacked;
 }
 
+function isKingInCheck(team, pieces) {
+	const king = pieces.find(p => p.type === "King" && p.team === team);
+	if (!king) return false;
+	const attacked = getAttackedSquares(team === 1 ? 2 : 1, pieces);
+	return attacked.has(king.slot);
+}
+
+// Get all legal moves for a team (respects check filtering)
+function getAllLegalMoves(team, pieces, enPassantTarget) {
+	const legalMoves = [];
+
+	pieces.filter(p => p.team === team).forEach(p => {
+		const c = colOf(p.slot);
+		const r = rowOf(p.slot);
+		let rawMoves = [];
+
+		switch (p.type) {
+			case "whitePawn": rawMoves = whitePawnMoves(c, r, p, pieces, enPassantTarget); break;
+			case "blackPawn": rawMoves = blackPawnMoves(c, r, p, pieces, enPassantTarget); break;
+			case "Bishop":    rawMoves = bishopMoves(c, r, p, pieces); break;
+			case "Knight":    rawMoves = knightMoves(c, r, p, pieces); break;
+			case "Rook":      rawMoves = rookMoves(c, r, p, pieces);   break;
+			case "Queen":     rawMoves = queenMoves(c, r, p, pieces);  break;
+			case "King":      rawMoves = kingMoves(c, r, p, pieces);   break;
+		}
+
+		rawMoves.forEach(move => {
+			const targetSlot = toSlot(move.c, move.r);
+			const simulated = simulateMove(pieces, p, targetSlot, move);
+			if (!isKingInCheck(team, simulated)) {
+				legalMoves.push({ piece: p, move });
+			}
+		});
+	});
+
+	return legalMoves;
+}
+
+// Simulate a move without modifying state
+function simulateMove(pieces, movingPiece, targetSlot, moveData) {
+	return pieces
+		.filter(p => {
+			if (p.slot === targetSlot && p !== movingPiece) return false; // capture
+			if (moveData?.enPassant && p.slot === moveData.captureSlot) return false; // en passant capture
+			return true;
+		})
+		.map(p => {
+			if (p === movingPiece) return { ...p, slot: targetSlot };
+			if (moveData?.castling && p.name === moveData.castling.name) return { ...p, slot: moveData.newSlot };
+			return p;
+		});
+}
+
+// ─── PROMOTION HELPERS ───────────────────────────────────────────────────────
+
+const PROMOTION_PIECES = {
+	1: [
+		{ type: "Queen",  image: whiteQueen,  imageClicked: whiteQueenClicked  },
+		{ type: "Rook",   image: whiteRook,   imageClicked: whiteRookClicked   },
+		{ type: "Bishop", image: whiteBishop, imageClicked: whiteBishopClicked },
+		{ type: "Knight", image: whiteKnight, imageClicked: whiteKnightClicked },
+	],
+	2: [
+		{ type: "Queen",  image: blackQueen,  imageClicked: blackQueenClicked  },
+		{ type: "Rook",   image: blackRook,   imageClicked: blackRookClicked   },
+		{ type: "Bishop", image: blackBishop, imageClicked: blackBishopClicked },
+		{ type: "Knight", image: blackKnight, imageClicked: blackKnightClicked },
+	],
+};
+
+function needsPromotion(piece) {
+	if (piece.type === "whitePawn" && piece.slot[1] === "8") return true;
+	if (piece.type === "blackPawn" && piece.slot[1] === "1") return true;
+	return false;
+}
+
+// ─── APP ─────────────────────────────────────────────────────────────────────
+
 function App() {
-	const {column, row, slots} = generateBoardSlots();
-	const [slot, setSlot] = useState(slots);
-	const [piece, setPiece] = useState(() => generatePieces(column, row));
-	const [turnToMove, setTurnToMove] = useState(1);
+	const [slots, setSlots]               = useState(() => generateBoardSlots());
+	const [pieces, setPieces]             = useState(() => generatePieces());
+	const [turnToMove, setTurnToMove]     = useState(1);
 	const [availableMoves, setAvailableMoves] = useState([]);
+	const [enPassantTarget, setEnPassantTarget] = useState(null); // slot string or null
+	const [promotionPending, setPromotionPending] = useState(null); // { pieceName } or null
+	const [gameStatus, setGameStatus]     = useState("playing"); // "playing" | "check" | "checkmate" | "stalemate"
 
-	//=====WHEN THE PIECE IS CLICKED=====//
-	function togglePiece(name){
-		let colIndex = null;
-		let rowIndex = null;
+	// ── After every move, update game status for the next player ──
+	function updateGameStatus(nextTeam, newPieces, newEnPassant) {
+		const inCheck = isKingInCheck(nextTeam, newPieces);
+		const legalMoves = getAllLegalMoves(nextTeam, newPieces, newEnPassant);
 
-		const clickedPiece = piece.find(p =>
-			name === p.name && p.team === turnToMove
-		);
-		
-		if(!clickedPiece){
-			setSlot(prevSlot => 
-				prevSlot.map(slot => 
-					({...slot, clickable: false})
-				)
-			);
+		if (legalMoves.length === 0) {
+			setGameStatus(inCheck ? "checkmate" : "stalemate");
+		} else {
+			setGameStatus(inCheck ? "check" : "playing");
+		}
+	}
+
+	// ── Filter moves that would leave own king in check ──
+	function getLegalMovesForPiece(p, rawMoves) {
+		return rawMoves.filter(move => {
+			const targetSlot = toSlot(move.c, move.r);
+			const simulated = simulateMove(pieces, p, targetSlot, move);
+			return !isKingInCheck(p.team, simulated);
+		});
+	}
+
+	// ── Click a piece ──
+	function togglePiece(name) {
+		if (gameStatus === "checkmate" || gameStatus === "stalemate") return;
+
+		const clicked = pieces.find(p => p.name === name && p.team === turnToMove);
+
+		if (!clicked) {
+			setPieces(prev => prev.map(p => ({ ...p, clicked: false })));
+			setSlots(prev => prev.map(s => ({ ...s, clickable: false })));
 			return;
 		}
-		else{
-			colIndex = column.indexOf(clickedPiece.slot[0]);
-			rowIndex = row.indexOf(Number(clickedPiece.slot[1]));
-			setPiece(prevPiece =>
-				prevPiece.map(piece =>
-					({...piece, clicked: name === piece.name ? !piece.clicked : false})
-				)
-			)
+
+		const c = colOf(clicked.slot);
+		const r = rowOf(clicked.slot);
+
+		let rawMoves = [];
+		switch (clicked.type) {
+			case "whitePawn": rawMoves = whitePawnMoves(c, r, clicked, pieces, enPassantTarget); break;
+			case "blackPawn": rawMoves = blackPawnMoves(c, r, clicked, pieces, enPassantTarget); break;
+			case "Bishop":    rawMoves = bishopMoves(c, r, clicked, pieces); break;
+			case "Knight":    rawMoves = knightMoves(c, r, clicked, pieces); break;
+			case "Rook":      rawMoves = rookMoves(c, r, clicked, pieces);   break;
+			case "Queen":     rawMoves = queenMoves(c, r, clicked, pieces);  break;
+			case "King":      rawMoves = kingMoves(c, r, clicked, pieces);   break;
 		}
 
-		let moveThePiece = [];
+		const legalMoves = getLegalMovesForPiece(clicked, rawMoves);
 
-		switch(clickedPiece.type){
-			case "whitePawn":
-				moveThePiece = whitePawnMoves(colIndex, rowIndex, clickedPiece, piece, column, row);
-				break;
-			case "blackPawn":
-				moveThePiece = blackPawnMoves(colIndex, rowIndex, clickedPiece, piece, column, row);
-				break;
-			case "Bishop":
-				moveThePiece = bishopMoves(colIndex, rowIndex, clickedPiece, piece, column, row);
-				break;
-			case "Knight":
-				moveThePiece = knightMoves(colIndex, rowIndex, clickedPiece, piece, column, row);
-				break;
-			case "Rook":
-				moveThePiece = rookMoves(colIndex, rowIndex, clickedPiece, piece, column, row);
-				break;
-			case "Queen":
-				moveThePiece = queenMoves(colIndex, rowIndex, clickedPiece, piece, column, row);
-				break;
-			case "King":
-				moveThePiece = kingMoves(colIndex, rowIndex, clickedPiece, piece, column, row);
-				break;
-		}
-			
-		setSlot(prevSlots =>
-			prevSlots.map(s => {
-				const moveMatch = moveThePiece.find(m => {
-						if(m.c < 0 || m.c > 7 || m.r < 0 || m.r > 7) return false;
-					
-						return column[m.c] + row[m.r] === s.slot;
-				});
-				return moveMatch ? {...s, clickable: true} : {...s, clickable: false};
-			})
-		)
+		setPieces(prev => prev.map(p => ({
+			...p,
+			clicked: p.name === name ? !p.clicked : false,
+		})));
 
-		setAvailableMoves(moveThePiece);
+		setSlots(prev => prev.map(s => {
+			const match = legalMoves.find(m => toSlot(m.c, m.r) === s.slot);
+			return { ...s, clickable: !!match };
+		}));
+
+		setAvailableMoves(legalMoves);
 	}
 
-	function movePiece(targetSlot){
-		const selectedPiece = piece.find(p => p.clicked);
+	// ── Move a piece ──
+	function movePiece(targetSlot) {
+		const selected = pieces.find(p => p.clicked);
+		if (!selected) return;
 
-		if(!selectedPiece) return;
+		const clickable = slots.find(s => s.slot === targetSlot && s.clickable);
+		if (!clickable) return;
 
-		const clickableSlot = slot.find(s => s.slot === targetSlot && s.clickable);
+		const moveData = availableMoves.find(m => toSlot(m.c, m.r) === targetSlot);
 
-		if(!clickableSlot) return;
-
-		const moveData = availableMoves.find(m => column[m.c] + row[m.r] === targetSlot);
-
-		setPiece(prevPiece =>
-			prevPiece
-			.filter(p => !(p.slot === targetSlot && !p.clicked))
+		// Build new pieces array
+		let newPieces = pieces
+			.filter(p => {
+				if (p.slot === targetSlot && p !== selected) return false; // normal capture
+				if (moveData?.enPassant && p.slot === moveData.captureSlot) return false; // en passant capture
+				return true;
+			})
 			.map(p => {
-				if(p.clicked){
-					return {...p, slot: targetSlot, clicked: false, moved: true}
-				}
-				if(moveData?.castling && p.name === moveData.castling.name){
-					return {...p, slot: moveData.newSlot, moved: true}
-				} 
+				if (p === selected) return { ...p, slot: targetSlot, clicked: false, moved: true };
+				if (moveData?.castling && p.name === moveData.castling.name) return { ...p, slot: moveData.newSlot, moved: true };
 				return p;
-			})
-		);
+			});
 
-		setSlot(prevSlot => 
-			prevSlot.map(s => (
-				{...s, clickable: false}
-			))
-		);
+		// En passant target for next turn
+		const newEnPassant = moveData?.pawnDoubleMove ?? null;
 
-		setTurnToMove(prevTurn => prevTurn === 1 ? 2 : 1);
+		// Clear highlights
+		setSlots(prev => prev.map(s => ({ ...s, clickable: false })));
+		setAvailableMoves([]);
+		setEnPassantTarget(newEnPassant);
+
+		// Check for pawn promotion
+		const movedPiece = newPieces.find(p => p.name === selected.name);
+		if (needsPromotion(movedPiece)) {
+			setPieces(newPieces);
+			setPromotionPending({ pieceName: movedPiece.name, team: movedPiece.team });
+			// Don't switch turns yet — wait for promotion choice
+			return;
+		}
+
+		const nextTeam = turnToMove === 1 ? 2 : 1;
+		setPieces(newPieces);
+		setTurnToMove(nextTeam);
+		updateGameStatus(nextTeam, newPieces, newEnPassant);
 	}
+
+	// ── Pawn promotion choice ──
+	function promotePawn(chosenType) {
+		if (!promotionPending) return;
+
+		const promotion = PROMOTION_PIECES[promotionPending.team].find(p => p.type === chosenType);
+
+		const newPieces = pieces.map(p => {
+			if (p.name !== promotionPending.pieceName) return p;
+			return {
+				...p,
+				type: promotion.type,
+				image: promotion.image,
+				imageClicked: promotion.imageClicked,
+				name: `${p.team === 1 ? "white" : "black"}${promotion.type}_promoted_${p.slot}`,
+			};
+		});
+
+		const nextTeam = turnToMove === 1 ? 2 : 1;
+		setPieces(newPieces);
+		setPromotionPending(null);
+		setTurnToMove(nextTeam);
+		updateGameStatus(nextTeam, newPieces, enPassantTarget);
+	}
+
+	// ── Reset game ──
+	function resetGame() {
+		setSlots(generateBoardSlots());
+		setPieces(generatePieces());
+		setTurnToMove(1);
+		setAvailableMoves([]);
+		setEnPassantTarget(null);
+		setPromotionPending(null);
+		setGameStatus("playing");
+	}
+
+	// ─── STATUS BANNER ────────────────────────────────────────────────────────
+	const statusMessage = {
+		playing:   `${turnToMove === 1 ? "White" : "Black"}'s turn`,
+		check:     `${turnToMove === 1 ? "White" : "Black"} is in check!`,
+		checkmate: `Checkmate! ${turnToMove === 1 ? "Black" : "White"} wins!`,
+		stalemate: "Stalemate! It's a draw.",
+	}[gameStatus];
 
 	return (
 		<>
-			<Board 
-				slotNames={slot} 
-				pieces={piece}
+			
+
+			{gameStatus === "checkmate" || gameStatus === "stalemate" ? (
+				<div style={{ textAlign: "center", marginBottom: "8px" }}>
+					<button onClick={resetGame} style={{ padding: "8px 20px", cursor: "pointer" }}>
+						Play Again
+					</button>
+				</div>
+			) : null}
+
+			<Board
+				statusMessage={statusMessage}
+				slotNames={slots}
+				pieces={pieces}
 				togglePiece={togglePiece}
 				movePiece={movePiece}
 				greenDot={greenDot}
+				promotionPending={promotionPending}
+				PROMOTION_PIECES={PROMOTION_PIECES}
+				promotePawn={promotePawn}
 			/>
 		</>
-	)
+	);
 }
 
 export default App;
