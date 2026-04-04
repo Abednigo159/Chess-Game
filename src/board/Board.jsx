@@ -28,7 +28,7 @@ export default function Board({slotNames, pieces, togglePiece, movePiece, greenD
 							}}/>
 						}
 						{!placement && slotName.clickable && (
-							<img className={style.greenDot}src={greenDot} 
+							<img className={style.greenDot} src={greenDot} 
 							alt="possible move" 
 							onClick={() => movePiece(slotName.slot)}/>
 							)
@@ -41,7 +41,7 @@ export default function Board({slotNames, pieces, togglePiece, movePiece, greenD
 		{promotionPending && (
 			<div className={style.promotionOption}>
 				<h2>Promote Pawn</h2>
-				<div>
+				<div className={style.promotionChoices}>
 					{PROMOTION_PIECES[promotionPending.team].map(({ type, image }) => (
 						<button key={type} onClick={() => promotePawn(type)}>
 							<img src={image} alt={type}/>
